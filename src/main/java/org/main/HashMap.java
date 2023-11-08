@@ -25,8 +25,9 @@ public class HashMap <T> {
      * Add an item to the hashmap.
      *
      * @param item The item to add to the hashmap.
+     * @return int The index at which the item was added.
      */
-    public void add(int key, T item) {
+    public int add(int key, T item) {
         if (count == size)
             throw new IndexOutOfBoundsException("No more empty space in hashmap");
 
@@ -40,6 +41,7 @@ public class HashMap <T> {
 
         map[index] = new Entry(key, item);
         count++;
+        return index;
     }
 
     @Override
