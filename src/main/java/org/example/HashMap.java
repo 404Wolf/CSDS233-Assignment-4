@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 public class HashMap <T> {
@@ -12,7 +13,7 @@ public class HashMap <T> {
 
     HashMap(int size, Function<Integer, Integer> hashFunc1, Function<Integer, Integer> hashFunc2) {
         this.size = size;
-        this.map = new Object[size];
+        this.map = (T[]) new Object[size];
         this.hashFunc1 = hashFunc1.compose((k) -> k % size);
         this.hashFunc2 = hashFunc2;
     }
@@ -27,6 +28,9 @@ public class HashMap <T> {
      * @param item The item to add to the hashmap.
      */
     public void add(int key, T item) {
+        if (count == size)
+            throw new IndexOutOfBoundsException("No more empty space in hashmap");
+
         int hash1 = this.hashFunc1.apply(key);
         int hash2 = this.hashFunc2.apply(key);
         int index = hash1;
