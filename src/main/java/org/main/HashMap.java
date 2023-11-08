@@ -1,5 +1,6 @@
 package org.main;
 
+import java.nio.BufferOverflowException;
 import java.util.Arrays;
 import java.util.function.Function;
 
@@ -27,7 +28,7 @@ public class HashMap <T> {
      * @param item The item to add to the hashmap.
      * @return int The index at which the item was added.
      */
-    public int add(int key, T item) {
+    public int add(int key, T item) throws EndlessDoubleHashException {
         if (count == size)
             throw new IndexOutOfBoundsException("No more empty space in hashmap");
 
@@ -36,8 +37,13 @@ public class HashMap <T> {
         int index = hash1;
         assert index <= size;
 
-        while (map[index] != null)
+        int overflowCount = 0;
+        while (map[index] != null) {
+            if (overflowCount > size * 50)
+                throw new EndlessDoubleHashException();
             index = (index + hash2) % size;
+            overflowCount++;
+        }
 
         map[index] = new Entry(key, item);
         count++;
@@ -71,4 +77,6 @@ public class HashMap <T> {
             return data.toString();
         }
     }
+
+    public static class EndlessDoubleHashException extends Exception {}
 }
